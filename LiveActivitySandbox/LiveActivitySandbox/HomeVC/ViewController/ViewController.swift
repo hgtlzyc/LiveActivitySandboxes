@@ -11,12 +11,19 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        layoutViews()
+        applyTheme()
     }
 }
 
 // MARK: - Setup Helpers
 private extension ViewController {
+    func layoutViews() {
+        
+    }
     
+    func applyTheme() {
+        
+    }
 }
 
