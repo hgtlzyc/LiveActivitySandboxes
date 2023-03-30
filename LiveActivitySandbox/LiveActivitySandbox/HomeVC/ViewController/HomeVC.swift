@@ -8,20 +8,28 @@
 import UIKit
 
 class HomeVC: UIViewController {
-
+    //Views
     private lazy var uiKitButton: UIButton = {
-        let btn = UIButton()
-        btn.addTarget(
-            self,
-            action: #selector(userDidPressUIKitButton),
-            for: .touchUpInside
+        let btn = UIButton(
+            configuration: .tinted()
         )
+        addAction(
+            #selector(userDidPressUIKitButton),
+            to: btn
+        )
+        
         return btn
     }()
     
+    //Properties
+    private let uiKitButtonTitle: String = "UIKit"
+    
+    
+    //Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutViews()
+        setupViews()
         applyTheme()
     }
 }
@@ -33,14 +41,26 @@ private extension HomeVC {
     }
 }
 
-// MARK: - Setup Helpers
+// MARK: - Setup Related
 private extension HomeVC {
     func layoutViews() {
-        
+        view.addSubview(uiKitButton)
+        uiKitButton.centerXAndY(inView: view)
+    }
+    
+    func setupViews() {
+        uiKitButton.setTitle(uiKitButtonTitle, for: .normal)
     }
     
     func applyTheme() {
-        
+        view.backgroundColor = .white
+    }
+    
+    //Helpers
+    func addAction(_ actioin: Selector, to btn: UIButton) {
+        btn.addTarget(self, action: actioin, for: .touchUpInside)
     }
 }
+
+
 
