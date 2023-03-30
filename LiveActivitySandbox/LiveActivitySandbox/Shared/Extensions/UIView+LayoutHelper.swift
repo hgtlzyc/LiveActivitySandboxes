@@ -8,10 +8,8 @@
 import UIKit
 
 // MARK: - Layout Related
-
 public extension UIView {
     // MARK: - Models
-
     enum ViewLayoutSettingModel {
         case topAnchor(to: NSLayoutYAxisAnchor, const: CGFloat = 0.0)
         case bottomAnchor(to: NSLayoutYAxisAnchor, const: CGFloat = 0.0)
@@ -35,7 +33,6 @@ public extension UIView {
     }
 
     // MARK: - Fill View
-
     @discardableResult
     func fillSelf(inView view: UIView, withPaddingAround padding: CGFloat = 0.0) -> [LayoutConstraintReturnModel: NSLayoutConstraint] {
         return anchor(
@@ -80,7 +77,6 @@ public extension UIView {
     }
 
     // MARK: - Anchor View
-
     // retuning the constrains in case want to do advance animations
     @discardableResult
     func anchor(_ viewLayoutHelperModels: ViewLayoutSettingModel...) -> [LayoutConstraintReturnModel: NSLayoutConstraint] {
@@ -128,7 +124,6 @@ public extension UIView {
     }
 
     // MARK: - Center View
-
     @discardableResult
     func centerXAndY(inView view: UIView) -> [LayoutConstraintReturnModel: NSLayoutConstraint] {
         let xConstraint = centerX(inView: view)
