@@ -19,12 +19,16 @@ class LocationManager: NSObject {
     private let locationManager = CLLocationManager()
     
     //Publishers
-    @Published private(set) var authStatus: CLAuthorizationStatus = .notDetermined
+    @Published private(set) var authStatus: CLAuthorizationStatus? = nil
     @Published private(set) var location: CLLocation? = nil
 }
 
 //MARK: - Public Accessable
 extension LocationManager {
+    func requestAlwaysAuth() {
+        locationManager.requestAlwaysAuthorization()
+    }
+    
     func startUpdates() {
         locationManager.startUpdatingLocation()
     }

@@ -11,19 +11,21 @@ import MapKit
 
 class TrackingVC: UIViewController {
     
+    private let locationUpdateDebounceInSecs: Double = 0.5
     private var subscriptions: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutViews()
-        setupViews()
+        createSubscriptions()
         applyTheme()
     }
 }
 
-//MARK: - Reacts
+//MARK: - Reactions
 private extension TrackingVC {
-    func reactToAuthState(_ state: CLAuthorizationStatus) {
+    func reactToAuthState(_ state: CLAuthorizationStatus?) {
+        guard let state else { return }
         switch state {
         case .notDetermined:
             print("notDetermined")
@@ -41,6 +43,11 @@ private extension TrackingVC {
             break
         }
     }
+    
+    func reactToLocationUpdate(_ location: CLLocation?) {
+        guard let location else { return }
+        print(location)
+    }
 }
 
 //MARK: - Setup
@@ -49,13 +56,29 @@ private extension TrackingVC {
         
     }
     
-    func setupViews() {
-        LocationManager.shared.$authStatus.sink { [weak self] state in
-            self?.reactToAuthState(state)
-        }.store(in: &subscriptions)
-    }
-    
     func applyTheme() {
         view.backgroundColor = .red
     }
+    
+    func createSubscriptions() {
+        LocationManager.shared
+            .$authStatus
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                self?.reactToAuthState(state)
+            }
+            .store(in: &subscriptions)
+        
+        LocationManager.shared
+            .$location
+            .debounce(
+                for: .seconds(locationUpdateDebounceInSecs),
+                scheduler: DispatchQueue.main
+            )
+            .sink { [weak self] location in
+                self?.reactToLocationUpdate(location)
+            }
+            .store(in: &subscriptions)
+    }
+    
 }
