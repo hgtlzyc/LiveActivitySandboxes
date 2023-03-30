@@ -29,22 +29,25 @@ private extension TrackingVC {
             Log.info("waiting for location auth status update")
             return
         }
+        let statusMessage: String
         switch state {
         case .notDetermined:
-            print("notDetermined")
+            statusMessage = "notDetermined"
         case .restricted:
-            print("restricted")
+            statusMessage = "restricted"
         case .denied:
-            print("denied")
+            statusMessage = "denied"
         case .authorizedAlways:
-            print("authorizedAlways")
+            statusMessage = "authorizedAlways"
         case .authorizedWhenInUse:
-            print("authorizedWhenInUse")
+            statusMessage = "authorizedWhenInUse"
         case .authorized:
-            print("authorized")
+            statusMessage = "authorized"
         @unknown default:
+            statusMessage = "unexpected"
             break
         }
+        Log.debug(statusMessage)
     }
     
     func reactToLocationUpdate(_ location: CLLocation?) {
