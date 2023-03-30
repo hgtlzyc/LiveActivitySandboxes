@@ -14,6 +14,7 @@
 		019A26B829D49B650015FE62 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 019A26B629D49B650015FE62 /* LaunchScreen.storyboard */; };
 		019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C429D4E4A50015FE62 /* UIView+LayoutHelper.swift */; };
 		2AF3E0A329D527C2001E48B7 /* TrackingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A229D527C2001E48B7 /* TrackingVC.swift */; };
+		2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A429D52984001E48B7 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		019A26B929D49B650015FE62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		019A26C429D4E4A50015FE62 /* UIView+LayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+LayoutHelper.swift"; sourceTree = "<group>"; };
 		2AF3E0A229D527C2001E48B7 /* TrackingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingVC.swift; sourceTree = "<group>"; };
+		2AF3E0A429D52984001E48B7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				019A26C329D4E4870015FE62 /* Extensions */,
+				2AF3E0A429D52984001E48B7 /* LocationManager.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 			files = (
 				2AF3E0A329D527C2001E48B7 /* TrackingVC.swift in Sources */,
 				019A26B029D49B640015FE62 /* HomeVC.swift in Sources */,
+				2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */,
 				019A26AC29D49B640015FE62 /* AppDelegate.swift in Sources */,
 				019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */,
 				019A26AE29D49B640015FE62 /* SceneDelegate.swift in Sources */,
