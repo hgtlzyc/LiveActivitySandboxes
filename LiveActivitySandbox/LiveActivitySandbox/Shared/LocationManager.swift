@@ -45,6 +45,12 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/1423615-locationmanager
+        //Apple doc states at least one location pass back
+        if locations.isEmpty {
+            Log.warning("unexpected empty locations")
+        }
+            
         locations.forEach {
             location = $0
         }

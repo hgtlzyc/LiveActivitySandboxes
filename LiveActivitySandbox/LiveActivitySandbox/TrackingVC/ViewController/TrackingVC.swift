@@ -25,7 +25,10 @@ class TrackingVC: UIViewController {
 //MARK: - Reactions
 private extension TrackingVC {
     func reactToAuthState(_ state: CLAuthorizationStatus?) {
-        guard let state else { return }
+        guard let state else {
+            Log.info("waiting for location auth status update")
+            return
+        }
         switch state {
         case .notDetermined:
             print("notDetermined")
@@ -45,7 +48,10 @@ private extension TrackingVC {
     }
     
     func reactToLocationUpdate(_ location: CLLocation?) {
-        guard let location else { return }
+        guard let location else {
+            Log.info("waiting for location value update")
+            return
+        }
         print(location)
     }
 }
