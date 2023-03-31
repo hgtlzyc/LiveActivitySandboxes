@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         window = UIWindow(windowScene: windowScene)
-        let initialVC = TrackingVC()
+        let initialVC = WorkoutTrackingVC()
         window?.rootViewController = initialVC
         window?.makeKeyAndVisible()
     }

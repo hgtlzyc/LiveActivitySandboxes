@@ -14,7 +14,8 @@
 		019A26B829D49B650015FE62 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 019A26B629D49B650015FE62 /* LaunchScreen.storyboard */; };
 		019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C429D4E4A50015FE62 /* UIView+LayoutHelper.swift */; };
 		019A26C729D5F0A50015FE62 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C629D5F0A50015FE62 /* Logger.swift */; };
-		2AF3E0A329D527C2001E48B7 /* TrackingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A229D527C2001E48B7 /* TrackingVC.swift */; };
+		019A26CA29D66BCA0015FE62 /* WorkoutTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C929D66BCA0015FE62 /* WorkoutTrackingViewModel.swift */; };
+		2AF3E0A329D527C2001E48B7 /* WorkoutTrackingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */; };
 		2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A429D52984001E48B7 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +29,8 @@
 		019A26B929D49B650015FE62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		019A26C429D4E4A50015FE62 /* UIView+LayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+LayoutHelper.swift"; sourceTree = "<group>"; };
 		019A26C629D5F0A50015FE62 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		2AF3E0A229D527C2001E48B7 /* TrackingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingVC.swift; sourceTree = "<group>"; };
+		019A26C929D66BCA0015FE62 /* WorkoutTrackingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingViewModel.swift; sourceTree = "<group>"; };
+		2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingVC.swift; sourceTree = "<group>"; };
 		2AF3E0A429D52984001E48B7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,7 +64,7 @@
 		019A26AA29D49B640015FE62 /* LiveActivitySandbox */ = {
 			isa = PBXGroup;
 			children = (
-				2AF3E0A029D5279D001E48B7 /* TrackingVC */,
+				2AF3E0A029D5279D001E48B7 /* WorkoutTrackingUIKit */,
 				019A26C029D49BB70015FE62 /* HomeVC */,
 				019A26C229D4E4830015FE62 /* Shared */,
 				019A26BF29D49BAC0015FE62 /* Support */,
@@ -116,18 +118,27 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		2AF3E0A029D5279D001E48B7 /* TrackingVC */ = {
+		019A26C829D66BB90015FE62 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				019A26C929D66BCA0015FE62 /* WorkoutTrackingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2AF3E0A029D5279D001E48B7 /* WorkoutTrackingUIKit */ = {
+			isa = PBXGroup;
+			children = (
+				019A26C829D66BB90015FE62 /* ViewModel */,
 				2AF3E0A129D527A5001E48B7 /* ViewController */,
 			);
-			path = TrackingVC;
+			path = WorkoutTrackingUIKit;
 			sourceTree = "<group>";
 		};
 		2AF3E0A129D527A5001E48B7 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2AF3E0A229D527C2001E48B7 /* TrackingVC.swift */,
+				2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -202,9 +213,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AF3E0A329D527C2001E48B7 /* TrackingVC.swift in Sources */,
+				2AF3E0A329D527C2001E48B7 /* WorkoutTrackingVC.swift in Sources */,
 				019A26B029D49B640015FE62 /* HomeVC.swift in Sources */,
 				2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */,
+				019A26CA29D66BCA0015FE62 /* WorkoutTrackingViewModel.swift in Sources */,
 				019A26AC29D49B640015FE62 /* AppDelegate.swift in Sources */,
 				019A26C729D5F0A50015FE62 /* Logger.swift in Sources */,
 				019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */,

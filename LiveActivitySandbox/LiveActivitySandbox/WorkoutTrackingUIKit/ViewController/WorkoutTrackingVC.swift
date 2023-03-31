@@ -1,5 +1,5 @@
 //
-//  TrackingVC.swift
+//  WorkoutTrackingVC.swift
 //  LiveActivitySandbox
 //
 //  Created by lijia xu on 3/29/23.
@@ -9,9 +9,22 @@ import UIKit
 import Combine
 import MapKit
 
-class TrackingVC: UIViewController {
+class WorkoutTrackingVC: UIViewController {
+    // MARK: - Views
+    private lazy var mapView: MKMapView = {
+        let mapView = MKMapView()
+        mapView.delegate = self
+        
+        return mapView
+    }()
     
+    //Data
     private let locationUpdateDebounceInSecs: Double = 0.5
+    
+    private lazy var locationManager: LocationManager = {
+        LocationManager.shared
+    }()
+    
     private var subscriptions: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
@@ -22,8 +35,13 @@ class TrackingVC: UIViewController {
     }
 }
 
-//MARK: - Reactions
-private extension TrackingVC {
+// MARK: - MapView Delegate
+extension WorkoutTrackingVC: MKMapViewDelegate {
+    
+}
+
+//MARK: - LocationManager Reactions
+private extension WorkoutTrackingVC {
     func reactToAuthState(_ state: CLAuthorizationStatus?) {
         guard let state else {
             Log.info("waiting for location auth status update")
@@ -60,7 +78,7 @@ private extension TrackingVC {
 }
 
 //MARK: - Setup
-private extension TrackingVC {
+private extension WorkoutTrackingVC {
     func layoutViews() {
         
     }
@@ -70,7 +88,7 @@ private extension TrackingVC {
     }
     
     func createSubscriptions() {
-        LocationManager.shared
+        locationManager
             .$authStatus
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -78,7 +96,7 @@ private extension TrackingVC {
             }
             .store(in: &subscriptions)
         
-        LocationManager.shared
+        locationManager
             .$location
             .debounce(
                 for: .seconds(locationUpdateDebounceInSecs),
@@ -89,5 +107,4 @@ private extension TrackingVC {
             }
             .store(in: &subscriptions)
     }
-    
 }

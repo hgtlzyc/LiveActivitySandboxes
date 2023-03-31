@@ -37,7 +37,7 @@ class HomeVC: UIViewController {
 // MARK: - UserActions
 private extension HomeVC {
     @objc func userDidPressUIKitButton() {
-        let trackingVC = TrackingVC()
+        let trackingVC = WorkoutTrackingVC()
         trackingVC.modalPresentationStyle = .fullScreen
         present(trackingVC, animated: true)
     }
