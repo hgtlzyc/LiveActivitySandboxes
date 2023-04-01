@@ -63,6 +63,3 @@ private extension HomeVC {
         btn.addTarget(self, action: actioin, for: .touchUpInside)
     }
 }
-
-
-

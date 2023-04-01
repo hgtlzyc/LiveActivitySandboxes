@@ -15,6 +15,7 @@
 		019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C429D4E4A50015FE62 /* UIView+LayoutHelper.swift */; };
 		019A26C729D5F0A50015FE62 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C629D5F0A50015FE62 /* Logger.swift */; };
 		019A26CA29D66BCA0015FE62 /* WorkoutTrackingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C929D66BCA0015FE62 /* WorkoutTrackingViewModel.swift */; };
+		019A26D029D7DB660015FE62 /* WorkoutTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26CF29D7DB660015FE62 /* WorkoutTrackingManager.swift */; };
 		2AF3E0A329D527C2001E48B7 /* WorkoutTrackingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */; };
 		2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A429D52984001E48B7 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 		019A26C429D4E4A50015FE62 /* UIView+LayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+LayoutHelper.swift"; sourceTree = "<group>"; };
 		019A26C629D5F0A50015FE62 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		019A26C929D66BCA0015FE62 /* WorkoutTrackingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingViewModel.swift; sourceTree = "<group>"; };
+		019A26CF29D7DB660015FE62 /* WorkoutTrackingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingManager.swift; sourceTree = "<group>"; };
 		2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingVC.swift; sourceTree = "<group>"; };
 		2AF3E0A429D52984001E48B7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,9 +128,18 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		019A26CE29D7DB4F0015FE62 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				019A26CF29D7DB660015FE62 /* WorkoutTrackingManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		2AF3E0A029D5279D001E48B7 /* WorkoutTrackingUIKit */ = {
 			isa = PBXGroup;
 			children = (
+				019A26CE29D7DB4F0015FE62 /* Manager */,
 				019A26C829D66BB90015FE62 /* ViewModel */,
 				2AF3E0A129D527A5001E48B7 /* ViewController */,
 			);
@@ -221,6 +232,7 @@
 				019A26C729D5F0A50015FE62 /* Logger.swift in Sources */,
 				019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */,
 				019A26AE29D49B640015FE62 /* SceneDelegate.swift in Sources */,
+				019A26D029D7DB660015FE62 /* WorkoutTrackingManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
