@@ -14,10 +14,20 @@ class WorkoutTrackingViewModel: NSObject {
     override init() {
         super.init()
     }
-    
+}
+
+// MARK: - MapView Related
+extension WorkoutTrackingViewModel {
+    func generateMapView() {
+        let mapView = MKMapView()
+    }
 }
 
 extension WorkoutTrackingViewModel: MKMapViewDelegate {
     
 }
 
+// MARK: - Location Manager
+private extension WorkoutTrackingViewModel {
+    
+}
