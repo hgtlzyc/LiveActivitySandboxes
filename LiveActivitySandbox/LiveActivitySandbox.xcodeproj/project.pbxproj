@@ -374,6 +374,8 @@
 				DEVELOPMENT_TEAM = PNQLC6535R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LiveActivitySandbox/Support/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "need always auth for demo";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "need always auth for demo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -405,6 +407,8 @@
 				DEVELOPMENT_TEAM = PNQLC6535R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LiveActivitySandbox/Support/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "need always auth for demo";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "need always auth for demo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

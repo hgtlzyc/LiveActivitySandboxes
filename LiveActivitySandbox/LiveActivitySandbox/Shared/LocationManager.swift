@@ -50,7 +50,6 @@ extension LocationManager: CLLocationManagerDelegate {
         if locations.isEmpty {
             Log.warning("unexpected empty locations")
         }
-            
         locations.forEach {
             location = $0
         }
@@ -63,6 +62,8 @@ private extension LocationManager {
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.activityType = .fitness
         locationManager.pausesLocationUpdatesAutomatically = false
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.showsBackgroundLocationIndicator = true
         locationManager.delegate = self
     }
 }
