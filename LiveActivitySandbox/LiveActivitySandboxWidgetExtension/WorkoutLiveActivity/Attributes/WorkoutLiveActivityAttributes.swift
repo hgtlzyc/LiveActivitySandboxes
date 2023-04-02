@@ -12,10 +12,18 @@ struct WorkoutLiveActivityAttributes: ActivityAttributes {
     var title: String
     var dateStarted: Date
     public struct ContentState: Codable, Hashable {
-        var totalDistance: Double
+        var totalDistance: Double?
         var speeds: [Double]
         var minSpeed: Double
         var avgSpeed: Double
         var maxSpeed: Double
+        
+        static let empthState: Self = ContentState(
+            totalDistance: 0,
+            speeds: [],
+            minSpeed: 0,
+            avgSpeed: 0,
+            maxSpeed: 0
+        )
     }
 }

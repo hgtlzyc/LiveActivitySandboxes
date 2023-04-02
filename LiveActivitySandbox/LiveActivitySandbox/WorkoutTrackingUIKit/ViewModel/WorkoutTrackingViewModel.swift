@@ -14,28 +14,29 @@ import MapKit
 class WorkoutTrackingViewModel: NSObject {
     // MARK: - Properties
     //LiveActivities
-    private let liveActivityName: String = "kWorkoutLiveActivity"
+    private let liveActivityTitle: String = "Speed Graph"
     private var liveActivity: Activity<WorkoutLiveActivityAttributes>?
     
     //Location Manager
-    private let locationUpdateDebounceInSecs: Double = 0.5
     private lazy var locationManager: LocationManager = {
         LocationManager.shared
     }()
     
-    //Workout Tracking
-    private let workoutTrackingManager = WorkoutTrackingManager()
+    //LiveActivity
+    private let liveActivityUpdateDebounceInSecs: Double = 0.5
+    private let liveActivityTrackingManager = WorkoutTrackingManager()
     
-    //Combine
     private var subscriptions: Set<AnyCancellable> = []
-    
-    // MARK: - Demo Only
-    private var demoCounter: Int = 0
     
     override init() {
         super.init()
         createSubscriptions()
     }
+}
+
+//MARK: - Parent Accessable
+extension WorkoutTrackingViewModel {
+    
 }
 
 // MARK: - LoicationManager Reactions
@@ -67,25 +68,38 @@ private extension WorkoutTrackingViewModel {
         }
         
         Task {
-            await workoutTrackingManager.addLocation(location)
-        }
-        
-        if let liveActivity {
-            demoCounter += 1
-            updateLiveActivity(
-                liveActivity,
-                with: demoCounter
+            await liveActivityTrackingManager.addLocation(location)
+            let contentState = await generateContentState(
+                basedOn: liveActivityTrackingManager
             )
-        } else {
-            Task {
+            if let liveActivity {
+                await updateLiveActivity(
+                    liveActivity,
+                    with: contentState
+                )
+            } else {
                 await endAllActivities()
                 liveActivity = generateNewActivity(
-                    with: demoCounter,
-                    name: liveActivityName
+                    with: contentState,
+                    title: liveActivityTitle
                 )
             }
         }
-        
+    }
+}
+
+//MARK: - ContentState Generation
+private extension WorkoutTrackingViewModel {
+    func generateContentState(
+        basedOn tracker: WorkoutTrackingManager
+    ) async -> WorkoutLiveActivityAttributes.ContentState {
+        WorkoutLiveActivityAttributes.ContentState(
+            totalDistance: await tracker.totalDistance,
+            speeds: await tracker.speeds,
+            minSpeed: await tracker.minSpeed,
+            avgSpeed: await tracker.avgSpeed,
+            maxSpeed: await tracker.maxSpeed
+        )
     }
 }
 
@@ -96,8 +110,8 @@ private extension WorkoutTrackingViewModel {
     }
     
     func generateNewActivity(
-        with value: Int,
-        name: String
+        with contentState: WorkoutLiveActivityAttributes.ContentState,
+        title: String
     ) -> Activity<WorkoutLiveActivityAttributes>? {
         guard isLiveActivityAvailable else {
             Log.error("live activity not enabled")
@@ -105,12 +119,12 @@ private extension WorkoutTrackingViewModel {
         }
         let newActivity: Activity<WorkoutLiveActivityAttributes>?
         
-        let attributes = WorkoutLiveActivityAttributes(name: name)
-        let initialContentState = WorkoutLiveActivityAttributes.ContentState(
-            value: value
+        let attributes = WorkoutLiveActivityAttributes(
+            title: title,
+            dateStarted: Date()
         )
         let activityContent = ActivityContent(
-            state: initialContentState,
+            state: contentState,
             staleDate: nil
         )
         
@@ -129,22 +143,14 @@ private extension WorkoutTrackingViewModel {
     
     func updateLiveActivity(
         _ liveActivity: Activity<WorkoutLiveActivityAttributes>,
-        with value: Int
-    ) {
-        let contentState = WorkoutLiveActivityAttributes.ContentState(
-            value: value
-        )
-        let content = ActivityContent(
-            state: contentState, staleDate: nil
-        )
-        
-        Task {
-            await liveActivity.update(content)
-        }
+        with contentState: WorkoutLiveActivityAttributes.ContentState
+    ) async {
+        let content = ActivityContent(state: contentState, staleDate: nil)
+        await liveActivity.update(content)
     }
     
     func endAllActivities() async {
-        let finalState = WorkoutLiveActivityAttributes.ContentState(value: 0)
+        let finalState = WorkoutLiveActivityAttributes.ContentState.empthState
         let finalContent = ActivityContent(
             state: finalState, staleDate: nil
         )
@@ -165,10 +171,11 @@ private extension WorkoutTrackingViewModel {
             }
             .store(in: &subscriptions)
         
+        //LiveActivity Sub
         locationManager
             .$location
             .debounce(
-                for: .seconds(locationUpdateDebounceInSecs),
+                for: .seconds(liveActivityUpdateDebounceInSecs),
                 scheduler: DispatchQueue.main
             )
             .sink { [weak self] location in
