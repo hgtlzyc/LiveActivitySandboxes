@@ -5,22 +5,18 @@
 //  Created by lijia xu on 3/31/23.
 //
 
-import Foundation
+import Accelerate
+import Combine
 import CoreLocation
 
 actor WorkoutTrackingManager {
-    //Properties
-    
-    
-    
     //SOC
-    @Published private var trackedLocations: [CLLocation]?
-    
-    
+    private var trackedLocations: [CLLocation]?
 }
 
 //MARK: - Parent Accessable
 extension WorkoutTrackingManager {
+    //Create
     func addLocation(_ location: CLLocation) {
         switch trackedLocations {
         case nil:
@@ -29,11 +25,27 @@ extension WorkoutTrackingManager {
             trackedLocations?.append(location)
         }
     }
+    
+    //Read
+    var totalDistance: Double? {
+        totalDistanceInMetersBasedOn(
+            trackedLocations
+        )?.rounded()
+    }
+    
+    var speeds: [Double]? {
+        getSpeeds(basedOn: trackedLocations)
+    }
+    
+    var avgSpeed: Double? {
+        guard let speeds else { return nil }
+        return vDSP.mean(speeds)
+    }
 }
 
 //MARK: - Helpers
 private extension WorkoutTrackingManager {
-    //Distance Calculate
+    //Distance Calculation
     func totalDistanceInMetersBasedOn(
         _ locations: [CLLocation]?
     ) -> Double? {
@@ -64,5 +76,20 @@ private extension WorkoutTrackingManager {
     func distanceInMetersBetween(coord1: CLLocationCoordinate2D, coord2: CLLocationCoordinate2D) -> Double {
         let locs = [coord1, coord2].map{ CLLocation(latitude: $0.latitude, longitude: $0.longitude) }
         return locs[0].distance(from: locs[1])
+    }
+    
+    //Speed Calculation
+    func getSpeeds(
+        basedOn locations: [CLLocation]?
+    ) -> [Double]? {
+        guard let locations else {
+            return nil
+        }
+        guard locations.count > 1 else {
+            return [0.0]
+        }
+        return locations.map {
+            Double($0.speed).rounded()
+        }
     }
 }

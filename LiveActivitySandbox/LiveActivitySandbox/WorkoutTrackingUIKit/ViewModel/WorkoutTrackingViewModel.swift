@@ -23,6 +23,9 @@ class WorkoutTrackingViewModel: NSObject {
         LocationManager.shared
     }()
     
+    //Workout Tracking
+    private let workoutTrackingManager = WorkoutTrackingManager()
+    
     //Combine
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -62,7 +65,11 @@ private extension WorkoutTrackingViewModel {
             Log.info("waiting for location value update")
             return
         }
-        Log.debug("\(location)")
+        
+        Task {
+            await workoutTrackingManager.addLocation(location)
+        }
+        
         if let liveActivity {
             demoCounter += 1
             updateLiveActivity(
