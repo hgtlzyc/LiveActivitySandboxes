@@ -15,8 +15,6 @@ struct WidgetExtensionLiveActivity: Widget {
             WorkoutLiveActivityView(context: context)
         } dynamicIsland: { context in
             DynamicIsland {
-                // Expanded UI goes here.  Compose the expanded UI through
-                // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
                     Text("Leading")
                 }
@@ -41,8 +39,8 @@ struct WidgetExtensionLiveActivity: Widget {
 }
 
 struct LiveActivitySandboxWidgetExtensionLiveActivity_Previews: PreviewProvider {
-    static let attributes = WorkoutLiveActivityAttributes(name: "Me")
-    static let contentState = WorkoutLiveActivityAttributes.ContentState(value: 3)
+    static let attributes = WorkoutLiveActivityAttributes(title: "LiveWidget", dateStarted: Date())
+    static let contentState = WorkoutLiveActivityAttributes.ContentState.empthState
 
     static var previews: some View {
         attributes

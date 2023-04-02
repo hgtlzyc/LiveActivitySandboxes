@@ -34,8 +34,8 @@ extension WorkoutTrackingManager {
         )?.rounded()
     }
     
-    var speeds: [Double] {
-        getSpeeds(basedOn: trackedLocations)
+    var speedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
+        generateSpeedInfo(basedOn: trackedLocations)
     }
     
     var minSpeed: Double {
@@ -54,6 +54,11 @@ extension WorkoutTrackingManager {
             return 0
         }
         return vDSP.maximum(speeds)
+    }
+    
+    //Helper
+    private var speeds: [Double] {
+        getSpeeds(basedOn: trackedLocations)
     }
 }
 
@@ -104,6 +109,21 @@ private extension WorkoutTrackingManager {
         }
         return locations.map {
             Double($0.speed).rounded()
+        }
+    }
+    
+    //SpeedInfo Mapping
+    func generateSpeedInfo(
+        basedOn locations: [CLLocation]?
+    ) -> [WorkoutLiveActivityAttributes.SpeedInfo] {
+        guard let locations else {
+            return []
+        }
+        return locations.map { location in
+            WorkoutLiveActivityAttributes.SpeedInfo(
+                date: location.timestamp,
+                speed: location.speed
+            )
         }
     }
 }

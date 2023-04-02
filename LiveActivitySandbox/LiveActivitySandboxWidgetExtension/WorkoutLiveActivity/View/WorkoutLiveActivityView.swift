@@ -10,42 +10,52 @@ import WidgetKit
 import Charts
 
 struct WorkoutLiveActivityView: View {
-    let context: ActivityViewContext<WorkoutLiveActivityAttributes>
     
-    private var upperBound: Int {
-        context.state.value
+    private let dateStarted: Date
+    private let state: WorkoutLiveActivityAttributes.ContentState    
+    
+    init(context: ActivityViewContext<WorkoutLiveActivityAttributes>) {
+        self.dateStarted = context.attributes.dateStarted
+        self.state = context.state
     }
-    
-    private var demoNums: [Double] {
-        Array(stride(from: 0.0, through: 3.5, by: 0.5))
-    }
-    
+}
+ 
+extension WorkoutLiveActivityView {
     var body: some View {
         VStack {
             HStack {
-                Text("Workout Time:")
-                Text("\(context.state.value)")
+                Text("Duration:")
+                Text(dateStarted, style: .timer)
                 Spacer()
             }
             .font(.caption2)
             Chart {
-                ForEach(demoNums) { num in
+                ForEach(state.speedData) { info in
                     LineMark(
-                        x: .value("H", "\(num)"),
-                        y: .value("V", num)
+                        x: .value("Date", info.date),
+                        y: .value("Speed", info.speed)
                     )
                 }
-                RuleMark(y: .value("V", 2))
+                
+                RuleMark(y: .value("Speed", state.avgSpeed))
                     .foregroundStyle(.red)
                     .annotation(position: .top, alignment: .leading) {
-                        Text("AVG: 2 mps")
+                        Text("AVG: \(Int(state.avgSpeed)) mps")
                             .font(.body)
                             .foregroundColor(.orange)
+                            .backgroundStyle(.gray)
                     }
             }
             .chartXAxis(.hidden)
+            .chartYScale(
+                domain: state.minSpeed...state.maxSpeed
+            )
             .chartYAxis {
-                AxisMarks(values: [0, upperBound]) { value in
+                AxisMarks(
+                    values: [
+                        state.minSpeed, state.maxSpeed
+                    ]
+                ) { value in
                      AxisGridLine(
                         stroke: StrokeStyle(
                             lineWidth: 1,
@@ -55,8 +65,10 @@ struct WorkoutLiveActivityView: View {
                      .foregroundStyle(.secondary)
                      
                     if let speed = value.as(Int.self) {
-                        AxisValueLabel("\(speed) mps")
-                            .foregroundStyle(.white)
+                        AxisValueLabel(
+                            "\(speed) mps"
+                        )
+                        .foregroundStyle(.white)
                     }
                  }
             }

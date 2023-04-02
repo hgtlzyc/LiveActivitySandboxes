@@ -79,7 +79,7 @@ private extension WorkoutTrackingViewModel {
                 )
             } else {
                 await endAllActivities()
-                liveActivity = generateNewActivity(
+                liveActivity = await generateNewActivity(
                     with: contentState,
                     title: liveActivityTitle
                 )
@@ -95,7 +95,7 @@ private extension WorkoutTrackingViewModel {
     ) async -> WorkoutLiveActivityAttributes.ContentState {
         WorkoutLiveActivityAttributes.ContentState(
             totalDistance: await tracker.totalDistance,
-            speeds: await tracker.speeds,
+            speedData: await tracker.speedData,
             minSpeed: await tracker.minSpeed,
             avgSpeed: await tracker.avgSpeed,
             maxSpeed: await tracker.maxSpeed
@@ -112,12 +112,11 @@ private extension WorkoutTrackingViewModel {
     func generateNewActivity(
         with contentState: WorkoutLiveActivityAttributes.ContentState,
         title: String
-    ) -> Activity<WorkoutLiveActivityAttributes>? {
+    ) async -> Activity<WorkoutLiveActivityAttributes>? {
         guard isLiveActivityAvailable else {
             Log.error("live activity not enabled")
             return nil
         }
-        let newActivity: Activity<WorkoutLiveActivityAttributes>?
         
         let attributes = WorkoutLiveActivityAttributes(
             title: title,
@@ -127,18 +126,20 @@ private extension WorkoutTrackingViewModel {
             state: contentState,
             staleDate: nil
         )
-        
-        do {
-            newActivity = try Activity.request(
-                attributes: attributes,
-                content: activityContent
-            )
-        } catch (let err ){
-            Log.error(err.localizedDescription)
-            newActivity = nil
+        return await MainActor.run {
+            let newActivity: Activity<WorkoutLiveActivityAttributes>?
+            do {
+                newActivity = try Activity.request(
+                    attributes: attributes,
+                    content: activityContent
+                )
+            } catch (let err ){
+                Log.error(err.localizedDescription)
+                newActivity = nil
+            }
+            
+            return newActivity
         }
-        
-        return newActivity
     }
     
     func updateLiveActivity(
