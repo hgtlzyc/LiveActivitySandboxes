@@ -70,10 +70,13 @@ private extension WorkoutTrackingViewModel {
                 with: demoCounter
             )
         } else {
-            liveActivity = generateNewActivity(
-                with: demoCounter,
-                name: liveActivityName
-            )
+            Task {
+                await endAllActivities()
+                liveActivity = generateNewActivity(
+                    with: demoCounter,
+                    name: liveActivityName
+                )
+            }
         }
         
     }
@@ -133,6 +136,15 @@ private extension WorkoutTrackingViewModel {
         }
     }
     
+    func endAllActivities() async {
+        let finalState = WorkoutLiveActivityAttributes.ContentState(value: 0)
+        let finalContent = ActivityContent(
+            state: finalState, staleDate: nil
+        )
+        for activity in Activity<WorkoutLiveActivityAttributes>.activities {
+            await activity.end(finalContent, dismissalPolicy: .immediate)
+        }
+    }
 }
 
 // MARK: - Setup
