@@ -11,6 +11,7 @@ import CoreLocation
 
 actor WorkoutTrackingManager {
     //SOC
+    var dateStarted: Date?
     private var trackedLocations: [CLLocation]?
 }
 
@@ -33,13 +34,26 @@ extension WorkoutTrackingManager {
         )?.rounded()
     }
     
-    var speeds: [Double]? {
+    var speeds: [Double] {
         getSpeeds(basedOn: trackedLocations)
     }
     
-    var avgSpeed: Double? {
-        guard let speeds else { return nil }
+    var minSpeed: Double {
+        vDSP.minimum(speeds)
+    }
+    
+    var avgSpeed: Double {
+        guard speeds.count > 1 else {
+            return 0
+        }
         return vDSP.mean(speeds)
+    }
+    
+    var maxSpeed: Double {
+        guard speeds.count > 1 else {
+            return 0
+        }
+        return vDSP.maximum(speeds)
     }
 }
 
@@ -81,9 +95,9 @@ private extension WorkoutTrackingManager {
     //Speed Calculation
     func getSpeeds(
         basedOn locations: [CLLocation]?
-    ) -> [Double]? {
+    ) -> [Double] {
         guard let locations else {
-            return nil
+            return []
         }
         guard locations.count > 1 else {
             return [0.0]
