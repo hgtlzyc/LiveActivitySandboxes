@@ -23,7 +23,7 @@ class WorkoutTrackingViewModel: NSObject {
     }()
     
     //LiveActivity
-    private let liveActivityUpdateDebounceInSecs: Double = 0.5
+    private let liveActivityUpdateDebounceInSecs: Double = 1
     private let liveActivityTrackingManager = WorkoutTrackingManager()
     
     private var subscriptions: Set<AnyCancellable> = []
@@ -95,10 +95,10 @@ private extension WorkoutTrackingViewModel {
     ) async -> WorkoutLiveActivityAttributes.ContentState {
         WorkoutLiveActivityAttributes.ContentState(
             totalDistance: await tracker.totalDistance,
-            speedData: await tracker.recentSpeedData,
-            minSpeed: await tracker.minSpeedInRefRange,
+            speedData: await tracker.speedData,
+            minSpeed: await tracker.minSpeed,
             avgSpeed: await tracker.avgSpeed,
-            maxSpeed: await tracker.maxSpeedInRefRange
+            maxSpeed: await tracker.maxSpeed
         )
     }
 }

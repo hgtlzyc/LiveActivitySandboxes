@@ -10,7 +10,8 @@ import Combine
 import CoreLocation
 
 actor WorkoutTrackingManager {
-    private let recentLocationsMaxRange: Int = 10
+    //Due to ActicityKit Limitation
+    private let maxDataPointsAllowed: Int = 30
     
     //SOC
     var dateStarted: Date?
@@ -36,40 +37,34 @@ extension WorkoutTrackingManager {
         )?.rounded()
     }
     
-    var recentSpeedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
-        generateSpeedInfo(basedOn: recentLocations)
+    var speedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
+        generateSpeedInfo(
+            basedOn: trackedLocations,
+            maxDataPointsAllowed: maxDataPointsAllowed
+        )
     }
     
-    var minSpeedInRefRange: Double {
-        vDSP.minimum(recentSpeeds)
+    var minSpeed: Double {
+        vDSP.minimum(speeds)
     }
     
     var avgSpeed: Double {
         guard speeds.count > 1 else {
             return 0
         }
-        return vDSP.mean(recentSpeeds)
+        return vDSP.mean(speeds)
     }
     
-    var maxSpeedInRefRange: Double {
+    var maxSpeed: Double {
         guard speeds.count > 1 else {
             return 0
         }
-        return vDSP.maximum(recentSpeeds)
+        return vDSP.maximum(speeds)
     }
     
     //Helper
     private var speeds: [Double] {
-        getSpeeds(basedOn: trackedLocations)
-    }
-    
-    private var recentSpeeds: [Double] {
-        getSpeeds(basedOn: recentLocations)
-    }
-    
-    private var recentLocations: [CLLocation] {
-        guard let trackedLocations else { return [] }
-        return trackedLocations.suffix(recentLocationsMaxRange)
+        speedData.map(\.speed)
     }
 }
 
@@ -125,16 +120,46 @@ private extension WorkoutTrackingManager {
     
     //SpeedInfo Mapping
     func generateSpeedInfo(
-        basedOn locations: [CLLocation]?
+        basedOn locations: [CLLocation]?,
+        maxDataPointsAllowed: Int
     ) -> [WorkoutLiveActivityAttributes.SpeedInfo] {
         guard let locations else {
             return []
         }
-        return locations.map { location in
+
+        guard locations.count > maxDataPointsAllowed else {
+            return locations.map { location in
+                WorkoutLiveActivityAttributes.SpeedInfo(
+                    date: location.timestamp,
+                    speed: location.speed
+                )
+            }
+        }
+        let processedLocations = locations.chunked(into: maxDataPointsAllowed)
+        let processedSpeeds = processedLocations.map { subLocations in
+            vDSP.mean(subLocations.map(\.speed))
+        }
+        let processedDates = processedLocations.map { subLocations in
+            vDSP.mean(subLocations.map(\.timestamp.timeIntervalSince1970))
+        }.map {
+            Date(timeIntervalSince1970: $0)
+        }
+        
+        let zipedSpeedInfo = zip(processedDates, processedSpeeds).map {
             WorkoutLiveActivityAttributes.SpeedInfo(
-                date: location.timestamp,
-                speed: location.speed
+                date: $0,
+                speed: $1
             )
+        }
+        
+        return zipedSpeedInfo
+    }
+}
+
+fileprivate extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
 }

@@ -25,11 +25,11 @@ extension WorkoutLiveActivityView {
     var body: some View {
         VStack {
             HStack {
-                totalAVGSpeedText
                 Text("Duration:")
                 Text(dateStarted, style: .timer)
             }
             .font(.caption)
+            .monospacedDigit()
             
             Chart {
                 ForEach(state.speedData) { info in
@@ -44,11 +44,18 @@ extension WorkoutLiveActivityView {
                     y: .value("Total Avg Speed", state.avgSpeed)
                 )
                 .foregroundStyle(.red)
+                .annotation {
+                    Text(
+                        "Total AVG: " + formattedSpeedString(state.avgSpeed)
+                    )
+                    .font(.body.bold())
+                    .foregroundColor(.orange)
+                }
                 
             }
             .chartXAxis(.hidden)
             .chartYScale(
-                domain: Int(state.minSpeed)...Int(state.maxSpeed)
+                domain: ceil(state.minSpeed)...floor(state.maxSpeed)
             )
             .chartYAxis {
                 AxisMarks(
@@ -64,9 +71,9 @@ extension WorkoutLiveActivityView {
                     )
                     .foregroundStyle(.secondary)
 
-                    if let speed = value.as(Int.self) {
+                    if let speed = value.as(Double.self) {
                         AxisValueLabel(
-                            "\(speed) mps"
+                            formattedSpeedString(speed)
                         )
                         .foregroundStyle(.white)
                     }
@@ -82,19 +89,21 @@ extension WorkoutLiveActivityView {
     }
 }
 
-// MARK: - SubViews
-private extension WorkoutLiveActivityView {
-    var totalAVGSpeedText: Text {
-        Text(
-            "Total AVG: \(formattedDouble(state.avgSpeed)) mps"
-        )
-        .font(.subheadline.bold())
-        .foregroundColor(.orange)
-    }
-}
-
 // MARK: - Helpers
 private extension WorkoutLiveActivityView {
+    func formattedSpeedString(
+        _ mpsValue: Double
+    ) -> String {
+        let mpsMeasurement = Measurement(
+            value: mpsValue,
+            unit: UnitSpeed.metersPerSecond
+        )
+        let formatter = MeasurementFormatter()
+        formatter.unitStyle = .short
+        return formatter.string(from: mpsMeasurement)
+    }
+    
+    
     func formattedDouble(
         _ value: Double,
         numberOfFractions: Int = 2
