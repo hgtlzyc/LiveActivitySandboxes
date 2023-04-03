@@ -10,13 +10,19 @@ import WidgetKit
 import Charts
 
 struct WorkoutLiveActivityView: View {
-    
+    //SOC
     private let dateStarted: Date
-    private let state: WorkoutLiveActivityAttributes.ContentState
+    private var state: WorkoutLiveActivityAttributes.ContentState
+    
+    //Visual
+    private let plotInterpolationMethod: InterpolationMethod = .monotone
     
     init(context: ActivityViewContext<WorkoutLiveActivityAttributes>) {
         self.dateStarted = context.attributes.dateStarted
         self.state = context.state
+        if state.minSpeed > state.maxSpeed {
+            state.minSpeed = state.maxSpeed
+        }
         Log.debug("init finished")
     }
 }
@@ -24,11 +30,15 @@ struct WorkoutLiveActivityView: View {
 extension WorkoutLiveActivityView {
     var body: some View {
         VStack {
-            HStack {
-                Text("Duration:")
-                Text(dateStarted, style: .timer)
+            HStack(alignment: .firstTextBaseline) {
+                [
+                Text("Duration: "),
+                durationText,
+                distanceText
+                ].reduce(Text(""), +)
             }
-            .font(.caption)
+            .foregroundColor(.gray)
+            .font(.caption.bold())
             .monospacedDigit()
             
             Chart {
@@ -38,15 +48,22 @@ extension WorkoutLiveActivityView {
                         y: .value("Speed", info.speed)
                     )
                     .foregroundStyle(.white.opacity(0.5))
+                    .interpolationMethod(plotInterpolationMethod)
                 }
                 
                 RuleMark(
                     y: .value("Total Avg Speed", state.avgSpeed)
                 )
                 .foregroundStyle(.red)
-                .annotation {
+                .annotation(
+                    position: .overlay,
+                    alignment: .bottomTrailing
+                ) {
                     Text(
-                        "Total AVG: " + formattedSpeedString(state.avgSpeed)
+                        Self.formattedString(
+                            state.avgSpeed,
+                            unit: UnitSpeed.metersPerSecond
+                        )
                     )
                     .font(.body.bold())
                     .foregroundColor(.orange)
@@ -55,7 +72,7 @@ extension WorkoutLiveActivityView {
             }
             .chartXAxis(.hidden)
             .chartYScale(
-                domain: ceil(state.minSpeed)...floor(state.maxSpeed)
+                domain: state.minSpeed...state.maxSpeed
             )
             .chartYAxis {
                 AxisMarks(
@@ -73,7 +90,11 @@ extension WorkoutLiveActivityView {
 
                     if let speed = value.as(Double.self) {
                         AxisValueLabel(
-                            formattedSpeedString(speed)
+                            Self.formattedString(
+                                speed,
+                                unit: UnitSpeed.metersPerSecond,
+                                numberOfFractions: 1
+                            )
                         )
                         .foregroundStyle(.white)
                     }
@@ -83,40 +104,60 @@ extension WorkoutLiveActivityView {
         .activityBackgroundTint(Color.black)
         .foregroundColor(.white)
         .padding()
-        .transaction { trans in
-            trans.animation = nil
-        }
     }
 }
 
-// MARK: - Helpers
+// MARK: - SubViews
 private extension WorkoutLiveActivityView {
-    func formattedSpeedString(
-        _ mpsValue: Double
+    var durationText: Text {
+        Text(dateStarted, style: .relative)
+            .foregroundColor(.white)
+    }
+    
+    var distanceText: Text {
+        let distanceString = Self.formattedString(
+            state.totalDistance ?? 0,
+            unit: UnitLength.meters,
+            numberOfFractions: 0,
+            unitStyle: .medium
+        )
+        let distanceText = Text(
+            distanceString
+        )
+        .foregroundColor(.white)
+        
+        return Text("  Distance: ") + distanceText
+    }
+}
+
+// MARK: - Shared Helpers
+extension WorkoutLiveActivityView {
+    static func formattedString(
+        _ baseValue: Double,
+        unit: Unit,
+        numberOfFractions: Int = 2,
+        unitStyle: Formatter.UnitStyle = .short
     ) -> String {
         let mpsMeasurement = Measurement(
-            value: mpsValue,
-            unit: UnitSpeed.metersPerSecond
+            value: baseValue,
+            unit: unit
         )
         let formatter = MeasurementFormatter()
-        formatter.unitStyle = .short
+        formatter.numberFormatter = numberFormatter(
+            numberOfFractions: numberOfFractions
+        )
+        formatter.unitOptions = .naturalScale
+        formatter.unitStyle = unitStyle
         return formatter.string(from: mpsMeasurement)
     }
     
     
-    func formattedDouble(
-        _ value: Double,
-        numberOfFractions: Int = 2
-    ) -> String {
+    static func numberFormatter(
+        numberOfFractions: Int
+    ) -> NumberFormatter {
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = numberOfFractions
         formatter.maximumFractionDigits = numberOfFractions
-        guard let doubleString = formatter.string(
-            from: value as NSNumber
-        ) else {
-            Log.error("unable formatt value: \(value)")
-            return "\(Int(value))"
-        }
-        return doubleString
+        return formatter
     }
 }

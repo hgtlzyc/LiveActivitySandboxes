@@ -18,9 +18,7 @@ class WorkoutTrackingViewModel: NSObject {
     private var liveActivity: Activity<WorkoutLiveActivityAttributes>?
     
     //Location Manager
-    private lazy var locationManager: LocationManager = {
-        LocationManager.shared
-    }()
+    private let locationManager: LocationManager = LocationManager.shared
     
     //LiveActivity
     private let liveActivityUpdateDebounceInSecs: Double = 1
@@ -175,6 +173,7 @@ private extension WorkoutTrackingViewModel {
         //LiveActivity Sub
         locationManager
             .$location
+            .print()
             .debounce(
                 for: .seconds(liveActivityUpdateDebounceInSecs),
                 scheduler: DispatchQueue.main

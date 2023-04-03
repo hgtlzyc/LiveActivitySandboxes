@@ -11,7 +11,7 @@ import CoreLocation
 
 actor WorkoutTrackingManager {
     //Due to ActicityKit Limitation
-    private let maxDataPointsAllowed: Int = 30
+    private let maxDataPointsAllowed: Int = 20
     
     //SOC
     var dateStarted: Date?
@@ -34,7 +34,7 @@ extension WorkoutTrackingManager {
     var totalDistance: Double? {
         totalDistanceInMetersBasedOn(
             trackedLocations
-        )?.rounded()
+        )
     }
     
     var speedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
@@ -135,7 +135,10 @@ private extension WorkoutTrackingManager {
                 )
             }
         }
-        let processedLocations = locations.chunked(into: maxDataPointsAllowed)
+        let targetChunks = Int(locations.count / maxDataPointsAllowed)
+        assert(targetChunks > 0)
+        let finalChunks = targetChunks > 0 ? targetChunks : 1
+        let processedLocations = locations.chunked(into: finalChunks)
         let processedSpeeds = processedLocations.map { subLocations in
             vDSP.mean(subLocations.map(\.speed))
         }

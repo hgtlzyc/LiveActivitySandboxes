@@ -12,7 +12,7 @@ import SwiftUI
 struct WidgetExtensionLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: WorkoutLiveActivityAttributes.self) { context in
-            WorkoutLiveActivityView(context: context)
+           WorkoutLiveActivityView(context: context)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
