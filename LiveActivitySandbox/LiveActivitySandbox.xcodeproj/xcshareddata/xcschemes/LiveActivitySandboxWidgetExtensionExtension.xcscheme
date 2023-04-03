@@ -15,20 +15,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "019A26D429D88F380015FE62"
-               BuildableName = "LiveActivitySandboxWidgetExtensionExtension.appex"
-               BlueprintName = "LiveActivitySandboxWidgetExtensionExtension"
-               ReferencedContainer = "container:LiveActivitySandbox.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "019A26A729D49B640015FE62"
                BuildableName = "LiveActivitySandbox.app"
                BlueprintName = "LiveActivitySandbox"

@@ -33,7 +33,7 @@ extension WorkoutLiveActivityAttributes {
         var date: Date
         var speed: Double
         var id: String {
-            date.description + String(speed)
+            date.description
         }
     }
 }

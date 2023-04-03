@@ -95,10 +95,10 @@ private extension WorkoutTrackingViewModel {
     ) async -> WorkoutLiveActivityAttributes.ContentState {
         WorkoutLiveActivityAttributes.ContentState(
             totalDistance: await tracker.totalDistance,
-            speedData: await tracker.speedData,
-            minSpeed: await tracker.minSpeed,
+            speedData: await tracker.recentSpeedData,
+            minSpeed: await tracker.minSpeedInRefRange,
             avgSpeed: await tracker.avgSpeed,
-            maxSpeed: await tracker.maxSpeed
+            maxSpeed: await tracker.maxSpeedInRefRange
         )
     }
 }

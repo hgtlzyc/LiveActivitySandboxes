@@ -10,6 +10,8 @@ import Combine
 import CoreLocation
 
 actor WorkoutTrackingManager {
+    private let recentLocationsMaxRange: Int = 10
+    
     //SOC
     var dateStarted: Date?
     private var trackedLocations: [CLLocation]?
@@ -34,31 +36,40 @@ extension WorkoutTrackingManager {
         )?.rounded()
     }
     
-    var speedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
-        generateSpeedInfo(basedOn: trackedLocations)
+    var recentSpeedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
+        generateSpeedInfo(basedOn: recentLocations)
     }
     
-    var minSpeed: Double {
-        vDSP.minimum(speeds)
+    var minSpeedInRefRange: Double {
+        vDSP.minimum(recentSpeeds)
     }
     
     var avgSpeed: Double {
         guard speeds.count > 1 else {
             return 0
         }
-        return vDSP.mean(speeds)
+        return vDSP.mean(recentSpeeds)
     }
     
-    var maxSpeed: Double {
+    var maxSpeedInRefRange: Double {
         guard speeds.count > 1 else {
             return 0
         }
-        return vDSP.maximum(speeds)
+        return vDSP.maximum(recentSpeeds)
     }
     
     //Helper
     private var speeds: [Double] {
         getSpeeds(basedOn: trackedLocations)
+    }
+    
+    private var recentSpeeds: [Double] {
+        getSpeeds(basedOn: recentLocations)
+    }
+    
+    private var recentLocations: [CLLocation] {
+        guard let trackedLocations else { return [] }
+        return trackedLocations.suffix(recentLocationsMaxRange)
     }
 }
 
