@@ -69,7 +69,9 @@ extension WorkoutTrackingManager {
     
     //Helper
     private var speeds: [Double] {
-        speedData.map(\.speed)
+        speedData.map {
+            max($0.speed, 0)
+        }
     }
 }
 
