@@ -144,18 +144,22 @@ private extension WorkoutTrackingViewModel {
         _ liveActivity: Activity<WorkoutLiveActivityAttributes>,
         with contentState: WorkoutLiveActivityAttributes.ContentState
     ) async {
-        let content = ActivityContent(state: contentState, staleDate: nil)
+        let content = ActivityContent(
+            state: contentState,
+            staleDate: nil
+        )
         await liveActivity.update(content)
     }
     
     func endAllActivities() async {
         let finalState = WorkoutLiveActivityAttributes.ContentState.empthState
         let finalContent = ActivityContent(
-            state: finalState, staleDate: Date()
+            state: finalState, staleDate: nil
         )
         for activity in Activity<WorkoutLiveActivityAttributes>.activities {
             await activity.end(finalContent, dismissalPolicy: .immediate)
         }
+        Log.info("End Previous Activities")
     }
 }
 
