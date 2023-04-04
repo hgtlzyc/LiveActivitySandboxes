@@ -47,6 +47,12 @@ extension WorkoutLiveActivityView {
                         x: .value("Date", info.date),
                         y: .value("Speed", info.speed)
                     )
+                    .lineStyle(
+                        .init(
+                            lineWidth: 1,
+                            dash: [6,3]
+                        )
+                    )
                     .foregroundStyle(.white.opacity(0.5))
                     .interpolationMethod(plotInterpolationMethod)
                 }
@@ -54,7 +60,7 @@ extension WorkoutLiveActivityView {
                 RuleMark(
                     y: .value("Total Avg Speed", state.avgSpeed)
                 )
-                .foregroundStyle(.red)
+                .foregroundStyle(.red.opacity(0.6))
                 .annotation(
                     position: .overlay,
                     alignment: .bottomTrailing
@@ -66,9 +72,8 @@ extension WorkoutLiveActivityView {
                         )
                     )
                     .font(.body.bold())
-                    .foregroundColor(.orange)
+                    .foregroundColor(.white)
                 }
-                
             }
             .chartXAxis(.hidden)
             .chartYScale(
@@ -86,7 +91,7 @@ extension WorkoutLiveActivityView {
                             dash: [6, 3]
                         )
                     )
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.clear)
 
                     if let speed = value.as(Double.self) {
                         AxisValueLabel(

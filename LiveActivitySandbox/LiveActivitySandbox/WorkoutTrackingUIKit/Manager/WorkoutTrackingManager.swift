@@ -11,7 +11,8 @@ import CoreLocation
 
 actor WorkoutTrackingManager {
     //Due to ActicityKit Limitation
-    private let maxDataPointsAllowed: Int = 20
+    //max will be 1.5 times this num
+    private let targetDataPointsAllowed: Int = 20
     
     //SOC
     var dateStarted: Date?
@@ -31,6 +32,10 @@ extension WorkoutTrackingManager {
     }
     
     //Read
+    nonisolated var maxDataTarget: Double {
+        return Double(targetDataPointsAllowed) * 1.5
+    }
+    
     var totalDistance: Double? {
         totalDistanceInMetersBasedOn(
             trackedLocations
@@ -40,7 +45,7 @@ extension WorkoutTrackingManager {
     var speedData: [WorkoutLiveActivityAttributes.SpeedInfo] {
         generateSpeedInfo(
             basedOn: trackedLocations,
-            maxDataPointsAllowed: maxDataPointsAllowed
+            targetDataPointsAllowed: targetDataPointsAllowed
         )
     }
     
@@ -119,15 +124,16 @@ private extension WorkoutTrackingManager {
     }
     
     //SpeedInfo Mapping
+    //max will be 1.5 times target(due to casting to int)
     func generateSpeedInfo(
         basedOn locations: [CLLocation]?,
-        maxDataPointsAllowed: Int
+        targetDataPointsAllowed: Int
     ) -> [WorkoutLiveActivityAttributes.SpeedInfo] {
         guard let locations else {
             return []
         }
 
-        guard locations.count > maxDataPointsAllowed else {
+        guard locations.count > targetDataPointsAllowed else {
             return locations.map { location in
                 WorkoutLiveActivityAttributes.SpeedInfo(
                     date: location.timestamp,
@@ -135,7 +141,7 @@ private extension WorkoutTrackingManager {
                 )
             }
         }
-        let targetChunks = Int(locations.count / maxDataPointsAllowed)
+        let targetChunks = Int(locations.count / targetDataPointsAllowed)
         assert(targetChunks > 0)
         let finalChunks = targetChunks > 0 ? targetChunks : 1
         let processedLocations = locations.chunked(into: finalChunks)

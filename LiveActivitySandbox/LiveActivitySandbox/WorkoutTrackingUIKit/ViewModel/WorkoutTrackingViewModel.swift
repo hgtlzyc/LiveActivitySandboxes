@@ -20,6 +20,8 @@ class WorkoutTrackingViewModel: NSObject {
     //Location Manager
     private let locationManager: LocationManager = LocationManager.shared
     
+    @Published var infoString: String = ""
+    
     //LiveActivity
     private let liveActivityUpdateDebounceInSecs: Double = 1
     private let liveActivityTrackingManager = WorkoutTrackingManager()
@@ -61,7 +63,9 @@ private extension WorkoutTrackingViewModel {
     
     func reactToLocationUpdate(_ location: CLLocation?) {
         guard let location else {
-            Log.info("waiting for location value update")
+            let infoString = "waiting for location value update"
+            Log.info(infoString)
+            self.infoString = infoString
             return
         }
         
@@ -70,6 +74,7 @@ private extension WorkoutTrackingViewModel {
             let contentState = await generateContentState(
                 basedOn: liveActivityTrackingManager
             )
+            self.infoString = generateInfoString(basedOn: contentState)
             if let liveActivity {
                 await updateLiveActivity(
                     liveActivity,
@@ -182,5 +187,46 @@ private extension WorkoutTrackingViewModel {
                 self?.reactToLocationUpdate(location)
             }
             .store(in: &subscriptions)
+    }
+}
+
+// MARK: - Info Helper For Fast Demo
+private extension WorkoutTrackingViewModel {
+    typealias DemoHelper = WorkoutLiveActivityView
+    
+    func generateInfoString(
+        basedOn content: WorkoutLiveActivityAttributes.ContentState
+    ) -> String {
+        let distance = DemoHelper.formattedString(
+            content.totalDistance ?? 0,
+            unit: UnitLength.meters,
+            numberOfFractions: 0,
+            unitStyle: .long
+        )
+        let minSpeedInfo = speedInfo(content.minSpeed)
+        let avgSpeedInfo = speedInfo(content.avgSpeed)
+        let maxSpeedInfo = speedInfo(content.maxSpeed)
+        let targetMaxDataPoints = Int(  ceil(liveActivityTrackingManager.maxDataTarget)
+        )
+        
+        return [
+            "Total Distance: \(distance)",
+            "AVG: \(avgSpeedInfo)",
+            "min:\(minSpeedInfo)",
+            "max: \(maxSpeedInfo)",
+            "",
+            "Target Max Data Points: \(targetMaxDataPoints)",
+            "Data Points Count: \(content.speedData.count)"
+        ].joined(separator: "\n")
+    }
+    
+    //Helper
+    func speedInfo(_ value: Double) -> String {
+        DemoHelper.formattedString(
+            value,
+            unit: UnitSpeed.metersPerSecond,
+            numberOfFractions: 2,
+            unitStyle: .long
+        )
     }
 }
