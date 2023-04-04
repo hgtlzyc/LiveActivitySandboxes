@@ -159,7 +159,7 @@ private extension WorkoutTrackingManager {
         let zipedSpeedInfo = zip(processedDates, processedSpeeds).map {
             WorkoutLiveActivityAttributes.SpeedInfo(
                 date: $0,
-                speed: $1
+                speed: max($1, 0)
             )
         }
         
