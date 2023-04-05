@@ -27,6 +27,7 @@
 		019A26F529D937000015FE62 /* WorkoutLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26F329D937000015FE62 /* WorkoutLiveActivityView.swift */; };
 		01DC2FA629DA2E4D00BBF4B8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C629D5F0A50015FE62 /* Logger.swift */; };
 		01ECDA9E29DBB7DA002BDD17 /* WorkoutLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26F329D937000015FE62 /* WorkoutLiveActivityView.swift */; };
+		01F5E51929DDF63500A3FCBE /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F5E51829DDF63500A3FCBE /* UserDefaultsManager.swift */; };
 		2AF3E0A329D527C2001E48B7 /* WorkoutTrackingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */; };
 		2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A429D52984001E48B7 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		019A26E429D88F3A0015FE62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		019A26EF29D891050015FE62 /* WorkoutLiveActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityAttributes.swift; sourceTree = "<group>"; };
 		019A26F329D937000015FE62 /* WorkoutLiveActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityView.swift; sourceTree = "<group>"; };
+		01F5E51829DDF63500A3FCBE /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingVC.swift; sourceTree = "<group>"; };
 		2AF3E0A429D52984001E48B7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -161,6 +163,7 @@
 		019A26C229D4E4830015FE62 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				01F5E51829DDF63500A3FCBE /* UserDefaultsManager.swift */,
 				019A26C629D5F0A50015FE62 /* Logger.swift */,
 				2AF3E0A429D52984001E48B7 /* LocationManager.swift */,
 				019A26C329D4E4870015FE62 /* Extensions */,
@@ -367,6 +370,7 @@
 			files = (
 				2AF3E0A329D527C2001E48B7 /* WorkoutTrackingVC.swift in Sources */,
 				01ECDA9E29DBB7DA002BDD17 /* WorkoutLiveActivityView.swift in Sources */,
+				01F5E51929DDF63500A3FCBE /* UserDefaultsManager.swift in Sources */,
 				019A26B029D49B640015FE62 /* HomeVC.swift in Sources */,
 				2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */,
 				019A26CA29D66BCA0015FE62 /* WorkoutTrackingViewModel.swift in Sources */,
