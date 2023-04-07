@@ -120,8 +120,11 @@ private extension WorkoutLiveActivityView {
     }
     
     var distanceText: Text {
+        guard let distanceValue = state.totalDistance else {
+            return Text("-")
+        }
         let distanceString = Self.formattedString(
-            state.totalDistance ?? 0,
+            distanceValue,
             unit: UnitLength.meters,
             numberOfFractions: 0,
             unitStyle: .medium

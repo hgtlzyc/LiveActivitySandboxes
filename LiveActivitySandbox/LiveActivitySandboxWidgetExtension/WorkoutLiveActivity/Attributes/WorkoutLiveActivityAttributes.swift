@@ -18,8 +18,8 @@ struct WorkoutLiveActivityAttributes: ActivityAttributes {
         var avgSpeed: Double
         var maxSpeed: Double
         
-        static let empthState: Self = ContentState(
-            totalDistance: 0,
+        static let emptyState: Self = ContentState(
+            totalDistance: nil,
             speedData: [],
             minSpeed: 0,
             avgSpeed: 0,

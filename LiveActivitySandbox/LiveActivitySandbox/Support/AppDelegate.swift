@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 private extension AppDelegate {
     func endAllLiveActivities() async {
-        let finalState = WorkoutLiveActivityAttributes.ContentState.empthState
+        let finalState = WorkoutLiveActivityAttributes.ContentState.emptyState
         let finalContent = ActivityContent(
             state: finalState, staleDate: Date()
         )

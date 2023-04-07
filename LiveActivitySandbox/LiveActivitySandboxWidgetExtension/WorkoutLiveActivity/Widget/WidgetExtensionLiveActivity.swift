@@ -40,7 +40,7 @@ struct WidgetExtensionLiveActivity: Widget {
 
 struct LiveActivitySandboxWidgetExtensionLiveActivity_Previews: PreviewProvider {
     static let attributes = WorkoutLiveActivityAttributes(title: "LiveWidget", dateStarted: Date())
-    static let contentState = WorkoutLiveActivityAttributes.ContentState.empthState
+    static let contentState = WorkoutLiveActivityAttributes.ContentState.emptyState
 
     static var previews: some View {
         attributes

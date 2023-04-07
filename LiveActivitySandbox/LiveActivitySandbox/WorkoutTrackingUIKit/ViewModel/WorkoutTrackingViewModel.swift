@@ -74,7 +74,7 @@ private extension WorkoutTrackingViewModel {
             } else {
                 let infoString = "waiting for location value update"
                 Log.info(infoString)
-                contentState = ContentState.empthState
+                contentState = ContentState.emptyState
                 self.infoString = infoString
             }
             if let liveActivity {
@@ -152,7 +152,7 @@ private extension WorkoutTrackingViewModel {
     }
     
     func endAllActivities() async {
-        let finalState = WorkoutLiveActivityAttributes.ContentState.empthState
+        let finalState = WorkoutLiveActivityAttributes.ContentState.emptyState
         let finalContent = ActivityContent(
             state: finalState, staleDate: nil
         )
@@ -179,7 +179,7 @@ private extension WorkoutTrackingViewModel {
         Task {
             await endAllActivities()
             liveActivity = generateNewActivity(
-                with: ContentState.empthState,
+                with: ContentState.emptyState,
                 title: liveActivityTitle
             )
         }
