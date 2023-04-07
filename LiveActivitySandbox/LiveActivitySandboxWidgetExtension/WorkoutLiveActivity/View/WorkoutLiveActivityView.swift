@@ -121,7 +121,7 @@ private extension WorkoutLiveActivityView {
     
     var distanceText: Text {
         guard let distanceValue = state.totalDistance else {
-            return Text("-")
+            return Text(" Waiting For Location Update").foregroundColor(.orange)
         }
         let distanceString = Self.formattedString(
             distanceValue,
