@@ -6,7 +6,6 @@
 //
 
 import Accelerate
-import Combine
 import CoreLocation
 
 actor WorkoutTrackingManager {

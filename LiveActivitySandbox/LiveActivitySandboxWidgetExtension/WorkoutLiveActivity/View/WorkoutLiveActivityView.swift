@@ -20,10 +20,6 @@ struct WorkoutLiveActivityView: View {
     init(context: ActivityViewContext<WorkoutLiveActivityAttributes>) {
         self.dateStarted = context.attributes.dateStarted
         self.state = context.state
-        if state.minSpeed > state.maxSpeed {
-            state.minSpeed = state.maxSpeed
-        }
-        Log.debug("init finished")
     }
 }
 
@@ -32,7 +28,6 @@ extension WorkoutLiveActivityView {
         VStack {
             HStack(alignment: .firstTextBaseline) {
                 [
-                Text("Duration: "),
                 durationText,
                 distanceText
                 ].reduce(Text(""), +)
@@ -58,7 +53,10 @@ extension WorkoutLiveActivityView {
                 }
                 
                 RuleMark(
-                    y: .value("Total Avg Speed", state.avgSpeed)
+                    y: .value(
+                        "Total Avg Speed",
+                        state.graphAvgSpeed
+                    )
                 )
                 .foregroundStyle(.red.opacity(0.6))
                 .annotation(
@@ -67,7 +65,7 @@ extension WorkoutLiveActivityView {
                 ) {
                     Text(
                         Self.formattedString(
-                            state.avgSpeed,
+                            state.trackedAvgSpeed,
                             unit: UnitSpeed.metersPerSecond
                         )
                     )
@@ -77,12 +75,13 @@ extension WorkoutLiveActivityView {
             }
             .chartXAxis(.hidden)
             .chartYScale(
-                domain: state.minSpeed...state.maxSpeed
+                domain: state.graphMinSpeed...state.graphMaxSpeed
             )
             .chartYAxis {
                 AxisMarks(
                     values: [
-                        state.minSpeed, state.maxSpeed
+                        state.graphMinSpeed,
+                        state.graphMaxSpeed
                     ]
                 ) { value in
                     AxisGridLine(
@@ -93,10 +92,13 @@ extension WorkoutLiveActivityView {
                     )
                     .foregroundStyle(.clear)
 
-                    if let speed = value.as(Double.self) {
+                    if let graphVal = value.as(Double.self),
+                       let trackedSpeed = getTrackedSpeedValue(
+                        basedOn: graphVal
+                       ) {
                         AxisValueLabel(
                             Self.formattedString(
-                                speed,
+                                trackedSpeed,
                                 unit: UnitSpeed.metersPerSecond,
                                 numberOfFractions: 1
                             )
@@ -115,13 +117,26 @@ extension WorkoutLiveActivityView {
 // MARK: - SubViews
 private extension WorkoutLiveActivityView {
     var durationText: Text {
-        Text(dateStarted, style: .relative)
-            .foregroundColor(.white)
+        let timeText = Text(
+            dateStarted,
+            style: .relative
+        ).foregroundColor(.white)
+        if let _ = state.totalDistance {
+            return Text("Duration: ") + timeText
+        } else {
+            return [
+                Text("Started: "),
+                timeText,
+                Text(" ago")
+            ].reduce(Text(""), +)
+        }
     }
     
     var distanceText: Text {
         guard let distanceValue = state.totalDistance else {
-            return Text(" Waiting For Location Update").foregroundColor(.orange)
+            return Text(
+                " Waiting For Location Update"
+            ).foregroundColor(.orange)
         }
         let distanceString = Self.formattedString(
             distanceValue,
@@ -135,6 +150,19 @@ private extension WorkoutLiveActivityView {
         .foregroundColor(.white)
         
         return Text("  Distance: ") + distanceText
+    }
+    
+    func getTrackedSpeedValue(
+        basedOn graphYValue: Double
+    ) -> Double? {
+        switch graphYValue {
+        case state.graphMinSpeed:
+            return state.trackedMinSpeed
+        case state.graphMaxSpeed:
+            return state.trackedMaxSpeed
+        default:
+            return nil
+        }
     }
 }
 

@@ -27,6 +27,7 @@
 		019A26F529D937000015FE62 /* WorkoutLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26F329D937000015FE62 /* WorkoutLiveActivityView.swift */; };
 		01DC2FA629DA2E4D00BBF4B8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26C629D5F0A50015FE62 /* Logger.swift */; };
 		01ECDA9E29DBB7DA002BDD17 /* WorkoutLiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A26F329D937000015FE62 /* WorkoutLiveActivityView.swift */; };
+		2A5B70D229E3644200779FAC /* WorkoutGraphProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5B70D129E3644200779FAC /* WorkoutGraphProcessor.swift */; };
 		2AF3E0A329D527C2001E48B7 /* WorkoutTrackingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */; };
 		2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF3E0A429D52984001E48B7 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		019A26E429D88F3A0015FE62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		019A26EF29D891050015FE62 /* WorkoutLiveActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityAttributes.swift; sourceTree = "<group>"; };
 		019A26F329D937000015FE62 /* WorkoutLiveActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityView.swift; sourceTree = "<group>"; };
+		2A5B70D129E3644200779FAC /* WorkoutGraphProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutGraphProcessor.swift; sourceTree = "<group>"; };
 		2AF3E0A229D527C2001E48B7 /* WorkoutTrackingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackingVC.swift; sourceTree = "<group>"; };
 		2AF3E0A429D52984001E48B7 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,6 +254,7 @@
 				019A26CE29D7DB4F0015FE62 /* Manager */,
 				019A26C829D66BB90015FE62 /* ViewModel */,
 				2AF3E0A129D527A5001E48B7 /* ViewController */,
+				2A5B70D129E3644200779FAC /* WorkoutGraphProcessor.swift */,
 			);
 			path = WorkoutTrackingUIKit;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				2AF3E0A529D52984001E48B7 /* LocationManager.swift in Sources */,
 				019A26CA29D66BCA0015FE62 /* WorkoutTrackingViewModel.swift in Sources */,
 				019A26AC29D49B640015FE62 /* AppDelegate.swift in Sources */,
+				2A5B70D229E3644200779FAC /* WorkoutGraphProcessor.swift in Sources */,
 				019A26C729D5F0A50015FE62 /* Logger.swift in Sources */,
 				019A26C529D4E4A50015FE62 /* UIView+LayoutHelper.swift in Sources */,
 				019A26F029D891050015FE62 /* WorkoutLiveActivityAttributes.swift in Sources */,

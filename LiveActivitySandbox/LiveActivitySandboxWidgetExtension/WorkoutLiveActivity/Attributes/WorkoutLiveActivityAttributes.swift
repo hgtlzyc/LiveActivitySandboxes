@@ -14,16 +14,24 @@ struct WorkoutLiveActivityAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         var totalDistance: Double?
         var speedData: [SpeedInfo]
-        var minSpeed: Double
-        var avgSpeed: Double
-        var maxSpeed: Double
+        
+        var trackedMinSpeed: Double
+        var trackedAvgSpeed: Double
+        var trackedMaxSpeed: Double
+        
+        var graphMinSpeed: Double
+        var graphAvgSpeed: Double
+        var graphMaxSpeed: Double
         
         static let emptyState: Self = ContentState(
             totalDistance: nil,
             speedData: [],
-            minSpeed: 0,
-            avgSpeed: 0,
-            maxSpeed: 0
+            trackedMinSpeed: 0,
+            trackedAvgSpeed: 0,
+            trackedMaxSpeed: 0,
+            graphMinSpeed: 0,
+            graphAvgSpeed: 0,
+            graphMaxSpeed: 0
         )
     }
 }
