@@ -14,7 +14,6 @@ actor WorkoutTrackingManager {
     private let targetDataPointsAllowed: Int = 20
     
     //SOC
-    var dateStarted: Date?
     private var trackedLocations: [CLLocation]?
 }
 
@@ -31,6 +30,10 @@ extension WorkoutTrackingManager {
     }
     
     //Read
+    var getTrackedLocations: [CLLocation]? {
+        return trackedLocations
+    }
+    
     nonisolated var maxDataTarget: Double {
         return Double(targetDataPointsAllowed) * 1.5
     }
