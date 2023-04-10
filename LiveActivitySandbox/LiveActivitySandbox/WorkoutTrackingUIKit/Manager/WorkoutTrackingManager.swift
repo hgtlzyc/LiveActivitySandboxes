@@ -9,10 +9,6 @@ import Accelerate
 import CoreLocation
 
 actor WorkoutTrackingManager {
-    //Due to ActicityKit Limitation
-    //max will be 1.5 times this num
-    private let targetDataPointsAllowed: Int = 20
-    
     //SOC
     private var trackedLocations: [CLLocation]?
 }
@@ -33,6 +29,9 @@ extension WorkoutTrackingManager {
     var nonNegativeSpeedLocations: [CLLocation]? {
         switch trackedLocations {
         case nil:
+            assertionFailure(
+                "trying to read tracked locations before add locations"
+            )
             return nil
         case let locations?:
             return getNonNegativeSpeedLocations(
@@ -135,11 +134,8 @@ private extension WorkoutTrackingManager {
         guard let locations else {
             return []
         }
-        guard locations.count > 1 else {
-            return [0.0]
-        }
         return locations.map {
-            Double($0.speed).rounded()
+            Double($0.speed)
         }
     }
     
