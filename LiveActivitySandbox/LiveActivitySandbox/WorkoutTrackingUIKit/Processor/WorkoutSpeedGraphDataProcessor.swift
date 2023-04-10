@@ -23,11 +23,11 @@ import CoreLocation
 //    var error: ErrorInfo? = nil
 //}
 
-struct WorkoutSpeedGraphDataProcessor {
+class WorkoutSpeedGraphDataProcessor {
     //Properties
-    //Due to ActicityKit Limitation
-    //max will be 1.5 times this number
-    private let targetFinalDataPoints: Int = 20
+    //Due to ActicityKit Limitation, need limit data below 4kb
+    //max will be 2 times this number
+    static let targetFinalDataPoints: Int = 20
     
     //SOC
     private let trackedLocations: [CLLocation]?
@@ -48,7 +48,7 @@ struct WorkoutSpeedGraphDataProcessor {
     ] = {
         generateChunkedSpeedInfo(
             basedOn: trackedLocations,
-            targetFinalDataPoints: targetFinalDataPoints
+            targetFinalDataPoints: Self.targetFinalDataPoints
         )
     }()
     
@@ -61,8 +61,12 @@ struct WorkoutSpeedGraphDataProcessor {
 
 //MARK: - Public Accessable
 extension WorkoutSpeedGraphDataProcessor {
-    mutating func generateContentState(
+    func generateContentState(
     ) -> WorkoutLiveActivityAttributes.ContentState {
+        guard let totalDistance else {
+            return .emptyState
+        }
+        
         let trackSpeedInfo = getTrackMinAvgMax()
         let graphSpeedInfo = getGraphMinAvgMax()
         return .init(
@@ -81,7 +85,7 @@ extension WorkoutSpeedGraphDataProcessor {
 
 // MARK: - Helper
 private extension WorkoutSpeedGraphDataProcessor {
-    mutating func getTrackMinAvgMax() -> (
+    func getTrackMinAvgMax() -> (
         min: Double,
         avg: Double,
         max: Double
@@ -89,7 +93,7 @@ private extension WorkoutSpeedGraphDataProcessor {
         return getMinAvgMaxSpeeds(basedOn: trackedSpeeds)
     }
     
-    mutating func getGraphMinAvgMax() -> (
+    func getGraphMinAvgMax() -> (
         min: Double,
         avg: Double,
         max: Double
@@ -148,15 +152,14 @@ private extension WorkoutSpeedGraphDataProcessor {
     func getMinAvgMaxSpeeds(
         basedOn speeds: [Double]
     ) -> (Double, Double, Double) {
-        let copy = speeds
-        let min = vDSP.minimum(copy)
-        let avg = vDSP.mean(copy)
-        let max = vDSP.maximum(copy)
+        let min = vDSP.minimum(speeds)
+        let avg = vDSP.mean(speeds)
+        let max = vDSP.maximum(speeds)
         return (min, avg, max)
     }
     
     // MARK: - Graph SpeedInfo Generation
-    //max will be 1.5 times target(due to casting to int)
+    //max will be 2 times target(due to casting to int)
     func generateChunkedSpeedInfo(
         basedOn locations: [CLLocation]?,
         targetFinalDataPoints: Int

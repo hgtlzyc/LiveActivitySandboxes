@@ -70,7 +70,7 @@ private extension WorkoutTrackingViewModel {
                 contentState = await generateContentState(
                     basedOn: liveActivityTrackingManager
                 )
-                self.infoString = generateInfoString(basedOn: contentState)
+                self.infoString = await generateInfoString(basedOn: contentState)
             } else {
                 let infoString = "waiting for location value update"
                 Log.info(infoString)
@@ -92,13 +92,11 @@ private extension WorkoutTrackingViewModel {
     func generateContentState(
         basedOn tracker: WorkoutTrackingManager
     ) async -> WorkoutLiveActivityAttributes.ContentState {
-        WorkoutLiveActivityAttributes.ContentState(
-            totalDistance: await tracker.totalDistance,
-            speedData: await tracker.speedData,
-            minSpeed: await tracker.minSpeed,
-            avgSpeed: await tracker.avgSpeed,
-            maxSpeed: await tracker.maxSpeed
+        let trakedNonZeroLocations = await tracker.nonNegativeSpeedLocations
+        let processor = WorkoutSpeedGraphDataProcessor(
+            trackedLocations: trakedNonZeroLocations
         )
+        return processor.generateContentState()
     }
 }
 
@@ -205,28 +203,32 @@ private extension WorkoutTrackingViewModel {
     
     func generateInfoString(
         basedOn content: WorkoutLiveActivityAttributes.ContentState
-    ) -> String {
+    ) async -> String {
         let distance = DemoHelper.formattedString(
             content.totalDistance ?? 0,
             unit: UnitLength.meters,
             numberOfFractions: 0,
             unitStyle: .long
         )
-        let minSpeedInfo = speedInfo(content.minSpeed)
-        let avgSpeedInfo = speedInfo(content.avgSpeed)
-        let maxSpeedInfo = speedInfo(content.maxSpeed)
-        let targetMaxDataPoints = Int(
-            ceil(liveActivityTrackingManager.maxDataTarget)
-        )
+        let minSpeedInfo = speedInfo(content.trackedMinSpeed)
+        let avgSpeedInfo = speedInfo(content.trackedAvgSpeed)
+        let maxSpeedInfo = speedInfo(content.trackedMaxSpeed)
+        let targetFinalPoints = WorkoutSpeedGraphDataProcessor.targetFinalDataPoints
+        
+        let tracker = liveActivityTrackingManager
+        async let numberOfDataCollected = tracker.totalNumberOfDataPointsTracked
+        async let numberOfDataSent = tracker.totalNumberOfDataPointsSent
         
         return [
             "Total Distance: \(distance)",
+            "min: \(minSpeedInfo)",
             "AVG: \(avgSpeedInfo)",
-            "min:\(minSpeedInfo)",
             "max: \(maxSpeedInfo)",
             "",
-            "Target Max Data Points: \(targetMaxDataPoints)",
-            "Data Points Count: \(content.speedData.count)"
+            "Target Final Data Points: \(targetFinalPoints)",
+            "Data Points For Graph: \(content.speedData.count)",
+            "Data Points Collected: \(await numberOfDataCollected ?? 0)",
+            "Non Zero Speeds: \(await numberOfDataSent ?? 0)"
         ].joined(separator: "\n")
     }
     
