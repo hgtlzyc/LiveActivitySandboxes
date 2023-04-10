@@ -11,31 +11,43 @@ import ActivityKit
 struct WorkoutLiveActivityAttributes: ActivityAttributes {
     var title: String
     var dateStarted: Date
-    public struct ContentState: Codable, Hashable {
-        var totalDistance: Double?
-        var speedData: [SpeedInfo]
+}
+
+// MARK: - Main Model
+extension WorkoutLiveActivityAttributes {
+    struct ContentState: Codable, Hashable {
+        var totalDistance: Double? = nil
+        var speedData: [SpeedInfo] = []
         
-        var trackedMinSpeed: Double
-        var trackedAvgSpeed: Double
-        var trackedMaxSpeed: Double
+        var trackedMinSpeed: Double = 0
+        var trackedAvgSpeed: Double = 0
+        var trackedMaxSpeed: Double = 0
         
-        var graphMinSpeed: Double
-        var graphAvgSpeed: Double
-        var graphMaxSpeed: Double
-        
-        static let emptyState: Self = ContentState(
-            totalDistance: nil,
-            speedData: [],
-            trackedMinSpeed: 0,
-            trackedAvgSpeed: 0,
-            trackedMaxSpeed: 0,
-            graphMinSpeed: 0,
-            graphAvgSpeed: 0,
-            graphMaxSpeed: 0
+        var graphMinSpeed: Double = 0
+        var graphAvgSpeed: Double = 0
+        var graphMaxSpeed: Double = 0
+        var error: ErrorInfo? = nil
+    }
+}
+
+//Helper
+extension WorkoutLiveActivityAttributes.ContentState {
+    static let emptyState: Self = .init()
+    
+    static func generateErrorState(
+        with msg: String,
+        at date: Date = Date()
+    ) -> Self {
+        .init(
+            error: .init(
+                message: msg,
+                dateUpdated: date
+            )
         )
     }
 }
 
+// MARK: - SubModels
 extension WorkoutLiveActivityAttributes {
     struct SpeedInfo: Identifiable, Codable, Hashable {
         var date: Date
@@ -43,5 +55,10 @@ extension WorkoutLiveActivityAttributes {
         var id: String {
             date.description
         }
+    }
+    
+    struct ErrorInfo: Codable, Hashable {
+        var message: String
+        var dateUpdated: Date
     }
 }

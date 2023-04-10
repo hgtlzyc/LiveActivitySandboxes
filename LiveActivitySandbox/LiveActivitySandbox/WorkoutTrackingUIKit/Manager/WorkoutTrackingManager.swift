@@ -30,8 +30,24 @@ extension WorkoutTrackingManager {
     }
     
     //Read
-    var getTrackedLocations: [CLLocation]? {
-        return trackedLocations
+    var nonNegativeSpeedLocations: [CLLocation]? {
+        switch trackedLocations {
+        case nil:
+            return nil
+        case let locations?:
+            return getNonNegativeSpeedLocations(
+                basedOn: locations
+            )
+        }
+    }
+
+    //Helper
+    private func getNonNegativeSpeedLocations(
+        basedOn locations: [CLLocation]
+    ) -> [CLLocation] {
+        locations.filter { location in
+            location.speed >= 0
+        }
     }
     
     nonisolated var maxDataTarget: Double {
